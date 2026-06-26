@@ -11,7 +11,7 @@ export interface Palestrante {
   temaPalestra: string;
   trilha: string;
   nivel: string;
-  dia: string;
+  dia: number;
   horario: string;
 }
 

@@ -1,7 +1,13 @@
 <section>
   <h2>Palestrantes</h2>
 
-  @for (palestrante of palestrantes; track palestrante.id) {
+  @if (carregando()) {
+    <p>Carregando palestrantes...</p>
+  } @else if (mensagemErro()) {
+    <p>{{ mensagemErro() }}</p>
+  }
+
+  @for (palestrante of palestrantes(); track palestrante.id) {
     <article>
       <img [src]="palestrante.foto" [alt]="'Foto de ' + palestrante.nome" width="160" height="160">
 
@@ -27,6 +33,8 @@
       </dl>
     </article>
   } @empty {
+    @if (!carregando() && !mensagemErro()) {
     <p>Nenhum palestrante encontrado.</p>
+    }
   }
 </section>

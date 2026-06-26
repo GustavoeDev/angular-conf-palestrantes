@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 
 import { Palestrante, PalestranteService } from './palestrante.service';
 
@@ -9,11 +9,20 @@ import { Palestrante, PalestranteService } from './palestrante.service';
 export class Palestrantes implements OnInit {
   private readonly palestranteService = inject(PalestranteService);
 
-  palestrantes: Palestrante[] = [];
+  palestrantes = signal<Palestrante[]>([]);
+  carregando = signal(true);
+  mensagemErro = signal('');
 
   ngOnInit() {
-    this.palestranteService.buscarPalestrantes().subscribe((palestrantes) => {
-      this.palestrantes = palestrantes;
+    this.palestranteService.buscarPalestrantes().subscribe({
+      next: (palestrantes) => {
+        this.palestrantes.set(palestrantes);
+        this.carregando.set(false);
+      },
+      error: () => {
+        this.mensagemErro.set('Não foi possível carregar os palestrantes.');
+        this.carregando.set(false);
+      }
     });
   }
 }
