@@ -1,0 +1,32 @@
+<section>
+  <h2>Palestrantes</h2>
+
+  @for (palestrante of palestrantes; track palestrante.id) {
+    <article>
+      <img [src]="palestrante.foto" [alt]="'Foto de ' + palestrante.nome" width="160" height="160">
+
+      <h3>{{ palestrante.nome }}</h3>
+      <p>{{ palestrante.cargo }} na {{ palestrante.empresa }}</p>
+      <p>{{ palestrante.bio }}</p>
+
+      <dl>
+        <dt>Tema</dt>
+        <dd>{{ palestrante.temaPalestra }}</dd>
+
+        <dt>Trilha</dt>
+        <dd>{{ palestrante.trilha }}</dd>
+
+        <dt>Nível</dt>
+        <dd>{{ palestrante.nivel }}</dd>
+
+        <dt>Dia</dt>
+        <dd>{{ palestrante.dia }}</dd>
+
+        <dt>Horário</dt>
+        <dd>{{ palestrante.horario }}</dd>
+      </dl>
+    </article>
+  } @empty {
+    <p>Nenhum palestrante encontrado.</p>
+  }
+</section>

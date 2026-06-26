@@ -1,3 +1,10 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { Palestrantes } from './palestrantes/palestrantes';
+
+export const routes: Routes = [
+  {
+    path: '',
+    component: Palestrantes
+  }
+];
