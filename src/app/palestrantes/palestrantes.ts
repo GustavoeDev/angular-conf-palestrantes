@@ -1,6 +1,7 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 import { Palestrante, PalestranteService } from './palestrante.service';
 
@@ -9,32 +10,24 @@ import { Palestrante, PalestranteService } from './palestrante.service';
   imports: [RouterLink],
   templateUrl: './palestrantes.html'
 })
-export class Palestrantes implements OnInit {
+export class Palestrantes {
   private readonly route = inject(ActivatedRoute);
   private readonly palestranteService = inject(PalestranteService);
-  private readonly destroyRef = inject(DestroyRef);
 
-  palestrantes = signal<Palestrante[]>([]);
-  carregando = signal(true);
-  mensagemErro = signal('');
-  simulandoFalha = signal(false);
+  termoBusca = signal('');
+  simulandoFalha = signal(this.route.snapshot.data['simularFalha'] === true);
 
-  ngOnInit() {
-    const simularFalha = this.route.snapshot.data['simularFalha'] === true;
-    this.simulandoFalha.set(simularFalha);
+  palestrantes = toSignal(
+    toObservable(this.termoBusca).pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap((termoBusca) => this.palestranteService.buscarPalestrantes(termoBusca, this.simulandoFalha()))
+    ),
+    { initialValue: [] as Palestrante[] }
+  );
 
-    this.palestranteService
-      .buscarPalestrantes(simularFalha)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (palestrantes) => {
-          this.palestrantes.set(palestrantes);
-          this.carregando.set(false);
-        },
-        error: () => {
-          this.mensagemErro.set('Não foi possível carregar os palestrantes.');
-          this.carregando.set(false);
-        }
-      });
+  atualizarTermoBusca(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.termoBusca.set(input.value);
   }
 }

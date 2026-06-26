@@ -10,11 +10,15 @@
     <p>Esta rota usa uma URL inexistente para demonstrar o fallback com catchError e of([]).</p>
   }
 
-  @if (carregando()) {
-    <p>Carregando palestrantes...</p>
-  } @else if (mensagemErro()) {
-    <p>{{ mensagemErro() }}</p>
-  }
+  <label>
+    Pesquisar por nome
+    <input
+      type="search"
+      placeholder="Pesquisar por nome"
+      [value]="termoBusca()"
+      (input)="atualizarTermoBusca($event)"
+    >
+  </label>
 
   @for (palestrante of palestrantes(); track palestrante.id) {
     <article>
@@ -42,12 +46,10 @@
       </dl>
     </article>
   } @empty {
-    @if (!carregando() && !mensagemErro()) {
-      @if (simulandoFalha()) {
-        <p>Falha interceptada com sucesso. O serviço retornou uma lista vazia para manter a aplicação funcionando.</p>
-      } @else {
-        <p>Nenhum palestrante encontrado.</p>
-      }
+    @if (simulandoFalha()) {
+      <p>Falha interceptada com sucesso. O serviço retornou uma lista vazia para manter a aplicação funcionando.</p>
+    } @else {
+      <p>Nenhum palestrante encontrado.</p>
     }
   }
 </section>
