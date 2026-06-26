@@ -1,0 +1,34 @@
+<section>
+  <h2>Gerenciamento de Tarefas</h2>
+
+  <nav>
+    <a routerLink="/">Palestrantes</a>
+    <a routerLink="/tarefas">Tarefas</a>
+  </nav>
+
+  <form [formGroup]="tarefaForm" (ngSubmit)="adicionarTarefa()">
+    <label for="titulo">Nova tarefa</label>
+    <input
+      id="titulo"
+      type="text"
+      formControlName="titulo"
+      placeholder="Ex: Confirmar buffet"
+    >
+
+    @if (tarefaForm.controls.titulo.invalid && tarefaForm.controls.titulo.touched) {
+      <p>Informe uma tarefa válida.</p>
+    }
+
+    <button type="submit" [disabled]="tarefaForm.invalid">Salvar</button>
+  </form>
+
+  <h3>Tarefas cadastradas</h3>
+
+  <ul>
+    @for (tarefa of tarefas; track tarefa.id) {
+      <li>{{ tarefa.titulo }}</li>
+    } @empty {
+      <li>Nenhuma tarefa cadastrada.</li>
+    }
+  </ul>
+</section>
