@@ -1,59 +1,45 @@
-# AngularConfPalestrantes
+# Angular Conf Palestrantes
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.4.
+Aplicação Angular para listar palestrantes da Angular Conf 2026 consumindo uma API HTTP local. O projeto demonstra integração com `HttpClient`, tratamento de erros com RxJS e busca reativa usando Signals.
 
-## Development server
+## Funcionalidades
 
-To start a local development server, run:
+- Consumo da API em: `http://localhost:3001/api/palestrantes` com `HttpClient` configurado globalmente via `provideHttpClient()`.
+- Serviço `PalestranteService` tipado com a interface `Palestrante`.
+- Pipeline RxJS com `tap`, `map` e `catchError`:
+  - `tap` registra a quantidade de palestrantes recebidos.
+  - `map` filtra a lista para exibir apenas palestrantes da empresa `Globo`.
+  - `catchError` retorna `of([])` em caso de falha, evitando quebra da aplicação.
+- Busca por nome com `signal`, `toObservable`, `debounceTime(500)`, `distinctUntilChanged`, `switchMap` e `toSignal`.
+- Rota de simulação de falha para validar o fallback de erro.
 
-```bash
-ng serve
-```
+## Rotas
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- `/` lista os palestrantes usando a API real.
+- `/palestrantes-falha` usa uma URL inexistente para demonstrar o tratamento de erro com `catchError`.
 
-## Code scaffolding
+## Pré-requisitos
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Node.js e npm instalados.
+- Clonar projeto backend: `https://github.com/ifrn-pau-dos-ferros/atividade-IR-httpclient`
+- Rodar backend
 
-```bash
-ng generate component component-name
-```
+## Como Rodar
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Instale as dependências:
 
 ```bash
-ng build
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Inicie a aplicação:
 
 ```bash
-ng test
+npm start
 ```
 
-## Running end-to-end tests
+Acesse:
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+```text
+http://localhost:4200/
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
