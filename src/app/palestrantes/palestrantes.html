@@ -1,6 +1,15 @@
 <section>
   <h2>Palestrantes</h2>
 
+  <nav>
+    <a routerLink="/">Lista principal</a>
+    <a routerLink="/palestrantes-falha">Simular falha da API</a>
+  </nav>
+
+  @if (simulandoFalha()) {
+    <p>Esta rota usa uma URL inexistente para demonstrar o fallback com catchError e of([]).</p>
+  }
+
   @if (carregando()) {
     <p>Carregando palestrantes...</p>
   } @else if (mensagemErro()) {
@@ -34,7 +43,11 @@
     </article>
   } @empty {
     @if (!carregando() && !mensagemErro()) {
-    <p>Nenhum palestrante encontrado.</p>
+      @if (simulandoFalha()) {
+        <p>Falha interceptada com sucesso. O serviço retornou uma lista vazia para manter a aplicação funcionando.</p>
+      } @else {
+        <p>Nenhum palestrante encontrado.</p>
+      }
     }
   }
 </section>

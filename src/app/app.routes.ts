@@ -6,5 +6,12 @@ export const routes: Routes = [
   {
     path: '',
     component: Palestrantes
+  },
+  {
+    path: 'palestrantes-falha',
+    component: Palestrantes,
+    data: {
+      simularFalha: true
+    }
   }
 ];
