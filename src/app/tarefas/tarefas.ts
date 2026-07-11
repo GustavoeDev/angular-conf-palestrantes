@@ -1,7 +1,8 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
+import { AuthService } from '../auth/auth.service';
 import { Tarefa, TarefaService } from './tarefa.service';
 
 @Component({
@@ -12,6 +13,8 @@ import { Tarefa, TarefaService } from './tarefa.service';
 export class TarefasComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly tarefaService = inject(TarefaService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
   tarefas: Tarefa[] = [];
@@ -41,6 +44,11 @@ export class TarefasComponent implements OnInit {
     this.tarefaService.adicionarTarefa(titulo);
     this.carregarTarefas();
     this.tarefaForm.reset();
+  }
+
+  sair() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   private carregarTarefas() {

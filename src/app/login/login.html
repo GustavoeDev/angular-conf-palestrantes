@@ -1,0 +1,31 @@
+<section>
+  <h2>Login</h2>
+
+  <nav>
+    <a routerLink="/">Palestrantes</a>
+  </nav>
+
+  <p>Acesso restrito à equipe interna da Angular Conf 2026.</p>
+
+  <form [formGroup]="loginForm" (ngSubmit)="entrar()">
+    <label for="email">E-mail</label>
+    <input id="email" type="email" formControlName="email" placeholder="aluno@teste.com">
+
+    @if (loginForm.controls.email.invalid && loginForm.controls.email.touched) {
+      <p>Informe um e-mail válido.</p>
+    }
+
+    <label for="senha">Senha</label>
+    <input id="senha" type="password" formControlName="senha" placeholder="Senha">
+
+    @if (loginForm.controls.senha.invalid && loginForm.controls.senha.touched) {
+      <p>Informe a senha.</p>
+    }
+
+    @if (mensagemErro()) {
+      <p>{{ mensagemErro() }}</p>
+    }
+
+    <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
+  </form>
+</section>
